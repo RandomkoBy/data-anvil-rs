@@ -1,9 +1,11 @@
-use eframe::egui;
+use egui;
 use crate::screens::{Screen, main_menu, xml_to_json, uuid_generator};
+use crate::localization::{Language, get_texts};
 
 #[derive(Default)]
 pub struct UtilitiesApp {
     current_screen: Screen,
+    current_language: Language,
 }
 
 impl UtilitiesApp {
@@ -30,11 +32,13 @@ impl UtilitiesApp {
 
 impl eframe::App for UtilitiesApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+        let texts = get_texts(self.current_language);
+        
         egui::CentralPanel::default().show(ctx, |ui| {
             match self.current_screen {
-                Screen::MainMenu => main_menu::show(ui, &mut self.current_screen),
-                Screen::XmlToJson => xml_to_json::show(ui, &mut self.current_screen),
-                Screen::UuidGenerator => uuid_generator::show(ui, &mut self.current_screen),
+                Screen::MainMenu => main_menu::show(ui, &mut self.current_screen, &mut self.current_language, &texts),
+                Screen::XmlToJson => xml_to_json::show(ui, &mut self.current_screen, &texts),
+                Screen::UuidGenerator => uuid_generator::show(ui, &mut self.current_screen, &texts),
             }
         });
     }

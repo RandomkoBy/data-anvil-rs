@@ -1,7 +1,11 @@
-use eframe::egui;
+use egui;
 
 mod app;
 mod screens;
+mod localization;
+
+use crate::localization::{Language, get_texts};
+use crate::screens::Screen;
 
 fn main() -> Result<(), eframe::Error> {
     let options = eframe::NativeOptions {
@@ -26,14 +30,7 @@ fn main() -> Result<(), eframe::Error> {
 #[derive(Default)]
 struct UtilitiesApp {
     current_screen: Screen,
-}
-
-#[derive(Default, PartialEq)]
-enum Screen {
-    #[default]
-    MainMenu,
-    XmlToJson,
-    UuidGenerator,
+    current_language: Language,
 }
 
 impl UtilitiesApp {
@@ -60,34 +57,53 @@ impl UtilitiesApp {
 
 impl eframe::App for UtilitiesApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+        let texts = get_texts(self.current_language);
+        
         egui::CentralPanel::default().show(ctx, |ui| {
             match self.current_screen {
-                Screen::MainMenu => self.show_main_menu(ui),
-                Screen::XmlToJson => self.show_xml_to_json(ui),
-                Screen::UuidGenerator => self.show_uuid_generator(ui),
+                Screen::MainMenu => self.show_main_menu(ui, &texts),
+                Screen::XmlToJson => self.show_xml_to_json(ui, &texts),
+                Screen::UuidGenerator => self.show_uuid_generator(ui, &texts),
             }
         });
     }
 }
 
 impl UtilitiesApp {
-    fn show_main_menu(&mut self, ui: &mut egui::Ui) {
+    fn show_main_menu(&mut self, ui: &mut egui::Ui, texts: &crate::localization::Texts) {
         ui.vertical_centered(|ui| {
+            // Language selector in top right
+            ui.with_layout(egui::Layout::right_to_left(egui::Align::TOP), |ui| {
+                ui.horizontal(|ui| {
+                    egui::ComboBox::from_id_source("language_selector")
+                        .selected_text(match self.current_language {
+                            Language::Russian => "Русский",
+                            Language::English => "English",
+                        })
+                        .show_ui(ui, |ui| {
+                            ui.selectable_value(&mut self.current_language, Language::Russian, "Русский");
+                            ui.selectable_value(&mut self.current_language, Language::English, "English");
+                        });
+                });
+            });
+            
             ui.add_space(50.0);
             
-            ui.heading("🛠️ Rust Utilities");
+            ui.heading(texts.app_title);
             ui.add_space(20.0);
+            ui.label(texts.select_utility);
+            ui.add_space(30.0);
             
             ui.horizontal(|ui| {
                 ui.add_space(50.0);
                 ui.vertical(|ui| {
-                    if ui.add_sized([200.0, 80.0], egui::Button::new("🔄 XML → JSON\nКонвертация XML в JSON")).clicked() {
+                    if ui.add_sized([200.0, 80.0], egui::Button::new(format!("{} \n{}", texts.xml_to_json_title, texts.xml_to_json_desc))).clicked() {
                         self.current_screen = Screen::XmlToJson;
                     }
                     
                     ui.add_space(20.0);
                     
-                    if ui.add_sized([200.0, 80.0], egui::Button::new("🆔 UUID Generator\nГенерация уникальных ID")).clicked() {
+                    if ui.add_sized([200.0, 80.0], egui::Button::new(format!("{} \n{}", texts.uuid_generator_title, texts.uuid_generator_desc))).clicked() {
                         self.current_screen = Screen::UuidGenerator;
                     }
                 });
@@ -95,45 +111,43 @@ impl UtilitiesApp {
                 ui.add_space(50.0);
                 
                 ui.vertical(|ui| {
-                    ui.add_sized([200.0, 80.0], egui::Button::new("📝 Text Editor\n(Coming Soon)").wrap(false));
-
-                    ui.add_sized([200.0, 80.0], egui::Button::new("🔐 Password Gen\n(Coming Soon)").wrap(false));
+                    ui.add_sized([200.0, 80.0], egui::Button::new(format!("{} \n{}", texts.password_gen_title, texts.password_gen_desc)).wrap(false));
                     
                     ui.add_space(20.0);
                     
-                    ui.add_sized([200.0, 80.0], egui::Button::new("📊 File Analyzer\n(Coming Soon)").wrap(false));
+                    ui.add_sized([200.0, 80.0], egui::Button::new(format!("{} \n{}", texts.file_analyzer_title, texts.file_analyzer_desc)).wrap(false));
                 });
             });
         });
     }
     
-    fn show_xml_to_json(&mut self, ui: &mut egui::Ui) {
+    fn show_xml_to_json(&mut self, ui: &mut egui::Ui, texts: &crate::localization::Texts) {
         ui.vertical(|ui| {
-            if ui.button("⬅️ Назад").clicked() {
+            if ui.button(texts.back_button).clicked() {
                 self.current_screen = Screen::MainMenu;
             }
             
             ui.add_space(20.0);
-            ui.heading("🔄 XML to JSON Converter");
+            ui.heading(texts.xml_to_json_heading);
             ui.separator();
             ui.add_space(20.0);
             
-            ui.label("Здесь будет интерфейс для конвертации XML в JSON");
+            ui.label(texts.xml_to_json_placeholder);
         });
     }
     
-    fn show_uuid_generator(&mut self, ui: &mut egui::Ui) {
+    fn show_uuid_generator(&mut self, ui: &mut egui::Ui, texts: &crate::localization::Texts) {
         ui.vertical(|ui| {
-            if ui.button("⬅️ Назад").clicked() {
+            if ui.button(texts.back_button).clicked() {
                 self.current_screen = Screen::MainMenu;
             }
             
             ui.add_space(20.0);
-            ui.heading("🆔 UUID Generator");
+            ui.heading(texts.uuid_generator_heading);
             ui.separator();
             ui.add_space(20.0);
             
-            ui.label("Здесь будет интерфейс для генерации UUID");
+            ui.label(texts.uuid_generator_placeholder);
         });
     }
 }
