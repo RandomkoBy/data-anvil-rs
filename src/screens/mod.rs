@@ -8,5 +8,4 @@ pub enum Screen {
     MainMenu,
     XmlToJson,
     UuidGenerator,
-    // Добавим больше утилит позже
 }

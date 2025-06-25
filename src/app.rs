@@ -8,22 +8,18 @@ pub struct UtilitiesApp {
 
 impl UtilitiesApp {
     pub fn setup_style(&mut self, cc: &eframe::CreationContext) {
-        // Настраиваем красивую темную тему
         let ctx = &cc.egui_ctx;
         let mut style = (*ctx.style()).clone();
         
-        // Настройка цветов
         style.visuals.dark_mode = true;
         style.visuals.override_text_color = Some(egui::Color32::WHITE);
         style.visuals.window_fill = egui::Color32::from_rgb(30, 30, 35);
         style.visuals.panel_fill = egui::Color32::from_rgb(25, 25, 30);
         
-        // Настройка кнопок
         style.visuals.widgets.inactive.bg_fill = egui::Color32::from_rgb(60, 60, 70);
         style.visuals.widgets.hovered.bg_fill = egui::Color32::from_rgb(70, 70, 80);
         style.visuals.widgets.active.bg_fill = egui::Color32::from_rgb(80, 80, 90);
         
-        // Закругленные углы
         style.visuals.widgets.inactive.rounding = egui::Rounding::same(8.0);
         style.visuals.widgets.hovered.rounding = egui::Rounding::same(8.0);
         style.visuals.widgets.active.rounding = egui::Rounding::same(8.0);
