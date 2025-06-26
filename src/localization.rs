@@ -36,6 +36,13 @@ pub struct Texts {
     // UUID Generator screen
     pub uuid_generator_heading: &'static str,
     pub uuid_generator_placeholder: &'static str,
+    pub uuid_version: &'static str,
+    pub generate_button: &'static str,
+    pub copy_button: &'static str,
+    pub generated_uuid: &'static str,
+    pub copied_message: &'static str,
+    pub uuid_v1_desc: &'static str,
+    pub uuid_v4_desc: &'static str,
 }
 
 const RUSSIAN_TEXTS: Texts = Texts {
@@ -54,8 +61,15 @@ const RUSSIAN_TEXTS: Texts = Texts {
     language: "Язык",
     xml_to_json_heading: "XML to JSON Converter",
     xml_to_json_placeholder: "Здесь будет интерфейс для конвертации XML в JSON",
-    uuid_generator_heading: "UUID Generator",
-    uuid_generator_placeholder: "Здесь будет интерфейс для генерации UUID",
+    uuid_generator_heading: "🆔 Генератор UUID",
+    uuid_generator_placeholder: "Выберите версию UUID и нажмите 'Генерировать'",
+    uuid_version: "Версия UUID:",
+    generate_button: "🎲 Генерировать",
+    copy_button: "📋 Копировать",
+    generated_uuid: "Сгенерированный UUID:",
+    copied_message: "✅ Скопировано в буфер обмена!",
+    uuid_v1_desc: "V1 (на основе времени и MAC-адреса)",
+    uuid_v4_desc: "V4 (случайный)",
 };
 
 const ENGLISH_TEXTS: Texts = Texts {
@@ -74,8 +88,15 @@ const ENGLISH_TEXTS: Texts = Texts {
     language: "Language",
     xml_to_json_heading: "XML to JSON Converter",
     xml_to_json_placeholder: "Here will be the interface for XML to JSON conversion",
-    uuid_generator_heading: "UUID Generator",
-    uuid_generator_placeholder: "Here will be the interface for UUID generation",
+    uuid_generator_heading: "🆔 UUID Generator",
+    uuid_generator_placeholder: "Select UUID version and click 'Generate'",
+    uuid_version: "UUID Version:",
+    generate_button: "🎲 Generate",
+    copy_button: "📋 Copy",
+    generated_uuid: "Generated UUID:",
+    copied_message: "✅ Copied to clipboard!",
+    uuid_v1_desc: "V1 (time-based with MAC address)",
+    uuid_v4_desc: "V4 (random)",
 };
 
 pub fn get_texts(language: Language) -> Texts {
